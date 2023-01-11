@@ -1,14 +1,71 @@
-import { useState } from "react";
-import QRCode from "react-qr-code";
+import "./App.css";
+import React, { useState } from "react";
+import {
+  MenuFoldOutlined,
+  MenuUnfoldOutlined,
+  QrcodeOutlined,
+  ReloadOutlined,
+  VideoCameraOutlined,
+} from "@ant-design/icons";
+import { Layout, Menu, theme } from "antd";
+import { Outlet, useNavigate } from "react-router-dom";
 
-function App() {
-  const [count, setCount] = useState(0);
+const { Header, Sider, Content } = Layout;
+
+const App: React.FC = () => {
+  const [collapsed, setCollapsed] = useState(false);
+  const {
+    token: { colorBgContainer },
+  } = theme.useToken();
+
+  const navigate = useNavigate();
 
   return (
-    <div className="App">
-      <QRCode size={128} value={"Pasha"} />
-    </div>
+    <Layout>
+      <Sider trigger={null} collapsible collapsed={collapsed}>
+        <div className="logo" />
+        <Menu
+          theme="dark"
+          mode="inline"
+          defaultSelectedKeys={["qr"]}
+          onClick={(info) => navigate(info.key)}
+          items={[
+            {
+              key: "qr",
+              icon: <QrcodeOutlined />,
+              label: "QR Code",
+            },
+            {
+              key: "base64",
+              icon: <ReloadOutlined />,
+              label: "Base64",
+            },
+          ]}
+        />
+      </Sider>
+      <Layout className="site-layout">
+        <Header style={{ padding: 0, background: colorBgContainer }}>
+          {React.createElement(
+            collapsed ? MenuUnfoldOutlined : MenuFoldOutlined,
+            {
+              className: "trigger",
+              onClick: () => setCollapsed(!collapsed),
+            }
+          )}
+        </Header>
+        <Content
+          style={{
+            margin: "24px 16px",
+            padding: 24,
+            minHeight: 280,
+            background: colorBgContainer,
+          }}
+        >
+          <Outlet />
+        </Content>
+      </Layout>
+    </Layout>
   );
-}
+};
 
 export default App;
