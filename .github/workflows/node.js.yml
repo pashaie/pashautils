@@ -5,7 +5,7 @@ name: Node.js CI
 
 on:
   release:
-    branches: [ "main" ]
+    types: [created]
   #pull_request:
    #branches: [ "main" ]
 
