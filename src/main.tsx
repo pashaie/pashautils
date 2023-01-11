@@ -4,6 +4,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import App from "./App";
 import Base64 from "./Base64";
 import "./index.css";
+import Password from "./Password";
 import Qr from "./Qr";
 
 const router = createBrowserRouter([
@@ -18,6 +19,10 @@ const router = createBrowserRouter([
       {
         path: "base64",
         element: <Base64 />,
+      },
+      {
+        path: "password",
+        element: <Password />,
       },
     ],
   },

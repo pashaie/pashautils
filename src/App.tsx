@@ -5,7 +5,7 @@ import {
   MenuUnfoldOutlined,
   QrcodeOutlined,
   ReloadOutlined,
-  VideoCameraOutlined,
+  KeyOutlined,
 } from "@ant-design/icons";
 import { Layout, Menu, theme } from "antd";
 import { Outlet, useNavigate } from "react-router-dom";
@@ -27,7 +27,7 @@ const App: React.FC = () => {
         <Menu
           theme="dark"
           mode="inline"
-          defaultSelectedKeys={["qr"]}
+          defaultSelectedKeys={[]}
           onClick={(info) => navigate(info.key)}
           items={[
             {
@@ -39,6 +39,11 @@ const App: React.FC = () => {
               key: "base64",
               icon: <ReloadOutlined />,
               label: "Base64",
+            },
+            {
+              key: "password",
+              icon: <KeyOutlined />,
+              label: "Password",
             },
           ]}
         />
