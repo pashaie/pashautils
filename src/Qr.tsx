@@ -1,6 +1,5 @@
-import { Input, Row, Space } from "antd";
+import { Input, QRCode, Row, Space } from "antd";
 import React, { useState } from "react";
-import QRCode from "react-qr-code";
 
 export default function Qr() {
   const [val, setVal] = useState("");
