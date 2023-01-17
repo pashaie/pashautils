@@ -1,1 +1,1 @@
-{"name":"pwq-qr","short_name":"pwq-qr","start_url":"/pashautils/","display":"standalone","background_color":"#ffffff","lang":"en","scope":"/pashautils/"}
+{"name":"Pasha Utils App","short_name":"pashautils","start_url":"/pashautils/","display":"standalone","background_color":"#176fdf","lang":"en","scope":"/pashautils/","description":"Pasha Utils App","icons":[{"src":"/android-chrome-192x192.png","sizes":"192x192","type":"image/png"},{"src":"/android-chrome-512x512.png","sizes":"512x512","type":"image/png"}],"theme_color":"#176fdf"}
