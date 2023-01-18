@@ -3,6 +3,7 @@ import ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import App from "./App";
 import Base64 from "./Base64";
+import Home from "./Home";
 import "./index.css";
 import Pashword from "./Pashword";
 import Password from "./Password";
@@ -13,6 +14,10 @@ const router = createBrowserRouter([
     path: "/pashautils/",
     element: <App />,
     children: [
+      {
+        path: "",
+        element: <Home />,
+      },
       {
         path: "qr",
         element: <Qr />,
