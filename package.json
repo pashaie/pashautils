@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@pashword/pashword-lib": "^0.1.11",
     "antd": "^5.1.4",
     "generate-password-browser": "^1.1.0",
     "hardpass": "^0.1.4",

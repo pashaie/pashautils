@@ -6,6 +6,7 @@ import {
   QrcodeOutlined,
   ReloadOutlined,
   KeyOutlined,
+  SafetyOutlined,
 } from "@ant-design/icons";
 import { Layout, Menu, theme } from "antd";
 import { Outlet, useNavigate } from "react-router-dom";
@@ -44,6 +45,11 @@ const App: React.FC = () => {
               key: "password",
               icon: <KeyOutlined />,
               label: "Password",
+            },
+            {
+              key: "pashword",
+              icon: <SafetyOutlined />,
+              label: "Pashword",
             },
           ]}
         />
