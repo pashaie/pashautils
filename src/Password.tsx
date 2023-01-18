@@ -79,7 +79,7 @@ export default function Password() {
             message={randomPass}
             type={
               ["error", "error", "warning", "info", "success"][
-                hardpass(randomPass).score
+                (hardpass as any)(randomPass).score
               ] as any
             }
             action={
