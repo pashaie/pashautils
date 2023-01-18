@@ -1,18 +1,20 @@
 import {
+  Alert,
   Button,
   Checkbox,
   Col,
   Divider,
   Input,
+  QRCode,
   Row,
   Slider,
   Tooltip,
 } from "antd";
 import React, { useState } from "react";
 import { generate } from "generate-password-browser";
-import { passwordStrength } from "check-password-strength";
 import { CopyOutlined } from "@ant-design/icons";
 import { CopyToClipboard } from "react-copy-to-clipboard";
+import hardpass from "hardpass";
 
 export default function Password() {
   const [length, setLength] = useState(20);
@@ -22,7 +24,7 @@ export default function Password() {
     lowercase: true,
     uppercase: true,
   });
-  const p = generate({
+  const randomPass = generate({
     length,
     // excludeSimilarCharacters: true,
     ...config,
@@ -40,7 +42,7 @@ export default function Password() {
   return (
     <div>
       <Row>
-        <Col span={12} offset={6}>
+        <Col xs={{ span: 24 }} md={{ span: 18, offset: 3 }}>
           <Slider
             value={length}
             onChange={(e) => setLength(e)}
@@ -72,17 +74,23 @@ export default function Password() {
             Uppercase
           </Checkbox>
           <Divider></Divider>
-          {passwordStrength(p).value}
 
-          <Input.Group compact>
-            <Input style={{ width: "calc(100% - 200px)" }} value={p} readOnly />
-
-            <CopyToClipboard text={p}>
-              <Tooltip title="copy">
-                <Button icon={<CopyOutlined />} />
-              </Tooltip>
-            </CopyToClipboard>
-          </Input.Group>
+          <Alert
+            message={randomPass}
+            type={
+              ["error", "error", "warning", "info", "success"][
+                hardpass(randomPass).score
+              ] as any
+            }
+            action={
+              <CopyToClipboard text={randomPass}>
+                <Tooltip title="copy">
+                  <Button icon={<CopyOutlined />} />
+                </Tooltip>
+              </CopyToClipboard>
+            }
+          />
+          <QRCode value={randomPass}></QRCode>
         </Col>
       </Row>
     </div>
