@@ -9,6 +9,7 @@ import {
   SafetyOutlined,
   HomeOutlined,
   GithubOutlined,
+  GlobalOutlined,
 } from "@ant-design/icons";
 import { Button, Layout, Menu, theme } from "antd";
 import { Outlet, useNavigate } from "react-router-dom";
@@ -72,7 +73,7 @@ const App: React.FC = () => {
             },
             {
               key: "nationalCode",
-              icon: <SafetyOutlined />,
+              icon: <GlobalOutlined />,
               label: "National Code",
             },
           ]}
