@@ -1,30 +1,71 @@
-import { Button, Col, Divider, Row, Space } from "antd";
-import React, { useState } from "react";
+import {
+  Button,
+  Col,
+  Divider,
+  Input,
+  InputNumber,
+  Row,
+  Space,
+  Tooltip,
+} from "antd";
+import React, { useEffect, useState } from "react";
+import { CopyOutlined } from "@ant-design/icons";
+import CopyToClipboard from "react-copy-to-clipboard";
 
 export default function NationalCode() {
   const [code, setCode] = useState("");
-  const generate = () => {
-    setCode(generator());
+  const [status, setStatus] = useState<"" | "error" | "warning" | undefined>(
+    ""
+  );
+  const generateRandomCode = () => {
+    setCode(_randomGenerator());
   };
-  const generateRound = () => {
-    setCode(generatorRound());
+  const generateRoundCode = () => {
+    setCode(_roundGenerator());
   };
+  useEffect(() => {
+    generateRoundCode();
+  }, []);
+
+  const updateCode = (val: string): void => {
+    setCode(val);
+    console.log(validator(val), val);
+    if (!validator(val)) {
+      setStatus("error");
+    } else {
+      setStatus("");
+    }
+  };
+
   return (
     <div>
       <Row justify="center">
         <Col xs={{ span: 24 }} md={{ span: 18 }}>
-          <Space>
-            <Button onClick={generate}>Generate Random</Button>
-            <Button onClick={generateRound}>Generate Round</Button>
+          <Space direction="horizontal">
+            <Input
+              onChange={(e) => updateCode(e.target.value)}
+              maxLength={10}
+              style={{ minWidth: "120px" }}
+              value={code}
+              status={status}
+              addonAfter={
+                <CopyToClipboard text={code}>
+                  <Tooltip title="copy">
+                    <CopyOutlined />
+                  </Tooltip>
+                </CopyToClipboard>
+              }
+            />
+            <Button onClick={generateRandomCode}>Generate Random</Button>
+            <Button onClick={generateRoundCode}>Generate Round</Button>
           </Space>
-          <Divider>{code}</Divider>
         </Col>
       </Row>
     </div>
   );
 }
 
-function generator() {
+function _randomGenerator() {
   let list = [],
     sum = 0;
 
@@ -44,7 +85,7 @@ function generator() {
   return list.join("");
 }
 
-function generatorRound(): string {
+function _roundGenerator(): string {
   let list: any = [],
     sum = 0;
   let j = 10;
@@ -65,7 +106,7 @@ function generatorRound(): string {
       return a != list[0];
     }).length == 0
   ) {
-    return generatorRound();
+    return _roundGenerator();
   }
   return list.join("");
 }

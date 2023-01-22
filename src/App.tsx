@@ -25,7 +25,7 @@ const App: React.FC = () => {
   const navigate = useNavigate();
   const onClick = (info: MenuInfo) => {
     if (info.key === "github") {
-      window.location.href = "https://github.com/pashaie/pashautils";
+      window.open("https://github.com/pashaie/pashautils", "_blank");
       return;
     }
     navigate(info.key);
