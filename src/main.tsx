@@ -5,6 +5,7 @@ import App from "./App";
 import Base64 from "./Base64";
 import Home from "./Home";
 import "./index.css";
+import NationalCode from "./NationalCode";
 import Pashword from "./Pashword";
 import Password from "./Password";
 import Qr from "./Qr";
@@ -33,6 +34,10 @@ const router = createBrowserRouter([
       {
         path: "pashword",
         element: <Pashword />,
+      },
+      {
+        path: "nationalCode",
+        element: <NationalCode></NationalCode>,
       },
     ],
   },

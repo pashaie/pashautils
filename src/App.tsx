@@ -8,9 +8,11 @@ import {
   KeyOutlined,
   SafetyOutlined,
   HomeOutlined,
+  GithubOutlined,
 } from "@ant-design/icons";
-import { Layout, Menu, theme } from "antd";
+import { Button, Layout, Menu, theme } from "antd";
 import { Outlet, useNavigate } from "react-router-dom";
+import { MenuInfo } from "rc-menu/lib/interface";
 
 const { Header, Sider, Content } = Layout;
 
@@ -21,17 +23,28 @@ const App: React.FC = () => {
   } = theme.useToken();
 
   const navigate = useNavigate();
+  const onClick = (info: MenuInfo) => {
+    if (info.key === "github") {
+      window.location.href = "https://github.com/pashaie/pashautils";
+      return;
+    }
+    navigate(info.key);
+  };
 
   return (
     <Layout>
       <Sider trigger={null} collapsible collapsed={collapsed}>
-        <div className="logo" />
         <Menu
           theme="dark"
           mode="inline"
           defaultSelectedKeys={[]}
-          onClick={(info) => navigate(info.key)}
+          onClick={onClick}
           items={[
+            {
+              key: "github",
+              icon: <GithubOutlined />,
+              label: "Github",
+            },
             {
               key: "",
               icon: <HomeOutlined />,
@@ -56,6 +69,11 @@ const App: React.FC = () => {
               key: "pashword",
               icon: <SafetyOutlined />,
               label: "Pashword",
+            },
+            {
+              key: "nationalCode",
+              icon: <SafetyOutlined />,
+              label: "National Code",
             },
           ]}
         />
