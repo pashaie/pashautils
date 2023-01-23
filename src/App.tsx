@@ -10,6 +10,7 @@ import {
   HomeOutlined,
   GithubOutlined,
   GlobalOutlined,
+  StarOutlined,
 } from "@ant-design/icons";
 import { Button, Layout, Menu, theme } from "antd";
 import { Outlet, useNavigate } from "react-router-dom";
@@ -75,6 +76,11 @@ const App: React.FC = () => {
               key: "nationalCode",
               icon: <GlobalOutlined />,
               label: "National Code",
+            },
+            {
+              key: "jwt",
+              icon: <StarOutlined />,
+              label: "JWT",
             },
           ]}
         />

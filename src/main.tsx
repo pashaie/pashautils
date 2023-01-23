@@ -5,6 +5,7 @@ import App from "./App";
 import Base64 from "./Base64";
 import Home from "./Home";
 import "./index.css";
+import JWT from "./JWT";
 import NationalCode from "./NationalCode";
 import Pashword from "./Pashword";
 import Password from "./Password";
@@ -38,6 +39,10 @@ const router = createBrowserRouter([
       {
         path: "nationalCode",
         element: <NationalCode></NationalCode>,
+      },
+      {
+        path: "jwt",
+        element: <JWT />,
       },
     ],
   },
