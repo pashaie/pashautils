@@ -82,6 +82,11 @@ const App: React.FC = () => {
               icon: <StarOutlined />,
               label: "JWT",
             },
+            {
+              key: "tiny",
+              icon: <StarOutlined />,
+              label: "Tiny Utl",
+            },
           ]}
         />
       </Sider>
