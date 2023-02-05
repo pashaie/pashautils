@@ -1,6 +1,5 @@
-import { Button, Col, Divider, Input, QRCode, Row, Space } from "antd";
-import TextArea from "antd/es/input/TextArea";
-import React, { useEffect, useState } from "react";
+import { Button, Col, Divider, Input, QRCode, Row } from "antd";
+import { useEffect, useState } from "react";
 import { SupabaseClient } from "@supabase/supabase-js";
 import { useParams } from "react-router-dom";
 const supabase = new SupabaseClient(
@@ -15,7 +14,7 @@ export default function Tiny() {
   const { id } = useParams();
   useEffect(() => {
     (async () => {
-      const { error, data } = await supabase.from("urls").select().eq("id", id);
+      const { data } = await supabase.from("urls").select().eq("id", id);
       if (data && data[0] && data[0].url) {
         window.location.href = data[0].url;
       }
@@ -23,10 +22,7 @@ export default function Tiny() {
   }, [id]);
 
   const generateUrl = async () => {
-    const { error, data } = await supabase
-      .from("urls")
-      .insert({ url: val })
-      .select();
+    const { data } = await supabase.from("urls").insert({ url: val }).select();
     setShort(
       "https://pashaie.github.io/pashautils/tiny/" + (data as any)[0].id
     );
