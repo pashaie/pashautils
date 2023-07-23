@@ -10,6 +10,7 @@ import NationalCode from "./NationalCode";
 import Pashword from "./Pashword";
 import Password from "./Password";
 import Qr from "./Qr";
+import Tiny from "./Tiny";
 
 const router = createBrowserRouter([
   {
@@ -43,6 +44,14 @@ const router = createBrowserRouter([
       {
         path: "jwt",
         element: <JWT />,
+      },
+      {
+        path: "tiny/:id",
+        element: <Tiny />,
+      },
+      {
+        path: "tiny",
+        element: <Tiny />,
       },
     ],
   },
