@@ -1,15 +1,15 @@
 import { Row, Col, Divider, QRCode } from "antd";
 import TextArea from "antd/es/input/TextArea";
 import React, { useEffect, useState } from "react";
-import jwt_decode from "jwt-decode";
+import { jwtDecode } from "jwt-decode";
 
 export default function JWT() {
   const [token, setToken] = useState("");
   const [data, setData] = useState("");
   useEffect(() => {
     try {
-      const header = jwt_decode(token, { header: true });
-      const payload = jwt_decode(token);
+      const header = jwtDecode(token, { header: true });
+      const payload = jwtDecode(token);
       setData(
         `${JSON.stringify(header, null, 2)} \n ${JSON.stringify(
           payload,
