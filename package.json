@@ -13,7 +13,7 @@
     "@ant-design/icons": "^6.3.4",
     "@pashword/pashword-lib": "^0.1.11",
     "@supabase/supabase-js": "^2.117.2",
-    "antd": "^5.29.3",
+    "antd": "^6.6.5",
     "generate-password-browser": "^1.1.0",
     "hardpass": "^0.1.4",
     "jwt-decode": "^4.0.0",
