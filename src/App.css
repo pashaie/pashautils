@@ -1,11 +1,247 @@
-.trigger {
-  padding: 0 24px;
-  font-size: 18px;
-  line-height: 64px;
-  cursor: pointer;
-  transition: color 0.3s;
+.app-layout {
+  min-height: 100vh;
 }
 
-.trigger:hover {
-  color: #1890ff;
+.app-sider {
+  z-index: 100;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 20px;
+  margin: 8px 8px 16px;
+  border-radius: 10px;
+  cursor: pointer;
+  color: rgba(255, 255, 255, 0.95);
+  transition: background 0.2s ease;
+}
+
+.brand:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.brand--collapsed {
+  justify-content: center;
+  padding: 16px 8px;
+  margin: 8px 4px 16px;
+}
+
+.brand__icon {
+  font-size: 22px;
+  color: #69b1ff;
+}
+
+.brand__title {
+  margin: 0 !important;
+  color: #fff !important;
+  line-height: 1.2 !important;
+}
+
+.brand__sub {
+  font-size: 12px !important;
+  color: rgba(255, 255, 255, 0.45) !important;
+}
+
+.sider-mask {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  z-index: 90;
+}
+
+.app-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 16px !important;
+  height: 64px;
+  line-height: normal;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+
+.trigger {
+  font-size: 18px;
+  width: 40px;
+  height: 40px;
+}
+
+.app-header__title {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  line-height: 1.25;
+}
+
+.app-header__hint {
+  font-size: 12px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: min(560px, 55vw);
+}
+
+.app-content {
+  margin: 16px;
+  padding: 24px;
+  min-height: calc(100vh - 96px);
+  border-radius: 12px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+
+@media (max-width: 767px) {
+  .app-content {
+    margin: 12px;
+    padding: 16px;
+  }
+
+  .app-header__hint {
+    display: none;
+  }
+
+  .app-sider {
+    position: fixed !important;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    height: 100vh;
+  }
+}
+
+/* Page header */
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.page-header__title {
+  margin: 0 0 4px !important;
+}
+
+.page-header__desc {
+  margin: 0 !important;
+  max-width: 560px;
+}
+
+/* Home */
+.home__hero {
+  margin-bottom: 28px;
+}
+
+.home__title {
+  margin-bottom: 8px !important;
+}
+
+.home__lead {
+  margin-bottom: 0 !important;
+  max-width: 520px;
+  font-size: 16px;
+}
+
+.tool-card {
+  height: 100%;
+  border-radius: 12px !important;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.tool-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+}
+
+.tool-card__icon {
+  font-size: 28px;
+  color: #1677ff;
+  margin-bottom: 12px;
+}
+
+.tool-card__title {
+  margin: 0 0 6px !important;
+}
+
+.tool-card__desc {
+  display: block;
+  line-height: 1.45;
+}
+
+/* Tool pages */
+.tool-panel {
+  max-width: 860px;
+}
+
+.tool-result {
+  margin-top: 20px;
+}
+
+.tool-result__actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 12px;
+}
+
+.password-display {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 16px;
+  word-break: break-all;
+}
+
+.jwt-output {
+  display: block;
+  padding: 16px;
+  border-radius: 8px;
+  background: #0f172a;
+  color: #e2e8f0;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 13px;
+  line-height: 1.55;
+  white-space: pre-wrap;
+  word-break: break-word;
+  max-height: 480px;
+  overflow: auto;
+}
+
+.jwt-output--empty {
+  background: #f5f5f5;
+  color: rgba(0, 0, 0, 0.45);
+}
+
+.qr-preview {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 24px;
+  border: 1px dashed #d9d9d9;
+  border-radius: 12px;
+  background: #fafafa;
+}
+
+.option-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 20px;
+  margin: 8px 0 4px;
+}
+
+.length-label {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 4px;
+}
+
+.short-url {
+  word-break: break-all;
+}
+
+.field-label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 500;
 }

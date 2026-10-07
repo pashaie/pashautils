@@ -1,23 +1,19 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Alert,
   AutoComplete,
   Button,
-  Checkbox,
   Col,
-  Divider,
   Form,
   Input,
   QRCode,
   Row,
   Select,
   Spin,
-  Tooltip,
 } from "antd";
-const { Option } = Select;
 import { generatePashword } from "@pashword/pashword-lib";
-import CopyToClipboard from "react-copy-to-clipboard";
-import { CopyOutlined } from "@ant-design/icons";
+import PageHeader from "./components/PageHeader";
+import CopyButton from "./components/CopyButton";
 
 interface Credential {
   website: string;
@@ -31,6 +27,7 @@ interface CredentialOption {
   label: string;
   credential: Credential;
 }
+
 export default function Pashword() {
   const [form] = Form.useForm();
   const [generatedPashword, setGeneratedPashword] = useState("");
@@ -43,26 +40,32 @@ export default function Pashword() {
     const credentials = getCredentials();
     setCredentialOptions(
       credentials.map((x) => ({
-        label: `${x.website} - ${x.username} - ${x.length}`,
+        label: `${x.website} — ${x.username} (${x.length})`,
         value: x.website,
         credential: x,
       }))
     );
   }, []);
-  const onSelect = (data: string, option: CredentialOption) => {
+
+  const onSelect = (_data: string, option: CredentialOption) => {
     form.setFieldsValue(option.credential);
   };
 
-  const onFinish = async (values: any) => {
+  const onFinish = async (values: {
+    website: string;
+    username: string;
+    secretKey: string;
+    length: string | number;
+  }) => {
     setGenerating(true);
-    let toHash = {
+    const toHash = {
       website: values.website,
       username: values.username,
       secretKey: values.secretKey,
       length: +values.length,
     };
 
-    let pashedPassword = await generatePashword(
+    const pashedPassword = await generatePashword(
       JSON.stringify(toHash),
       +values.length,
       values.website,
@@ -73,12 +76,21 @@ export default function Pashword() {
     if (
       !credentials.find(
         (x) =>
-          x.length === values.length &&
+          x.length === toHash.length &&
           x.website === values.website &&
           x.username === values.username
       )
-    )
+    ) {
       setCredentials([...credentials, { ...toHash, secretKey: "" }]);
+      setCredentialOptions((prev) => [
+        ...prev,
+        {
+          label: `${toHash.website} — ${toHash.username} (${toHash.length})`,
+          value: toHash.website,
+          credential: { ...toHash, secretKey: "" },
+        },
+      ]);
+    }
 
     setGeneratedPashword(pashedPassword);
     setGenerating(false);
@@ -89,98 +101,99 @@ export default function Pashword() {
     if (!credentialsStr) return [];
     return JSON.parse(credentialsStr) as Credential[];
   };
+
   const setCredentials = (credentials: Credential[]) => {
     localStorage.setItem("credentials", JSON.stringify(credentials));
   };
 
-  const onFinishFailed = (errorInfo: any) => {
-    console.log("Failed:", errorInfo);
-  };
-
   return (
     <Spin spinning={generating}>
-      <Row>
-        <Col xs={{ span: 24 }} md={{ span: 18, offset: 3 }}>
-          <Form
-            form={form}
-            layout="vertical"
-            name="basic"
-            labelCol={{ span: 4 }}
-            //   wrapperCol={{ span: 16 }}
-            initialValues={{ remember: true }}
-            onFinish={onFinish}
-            requiredMark={false}
-            autoComplete="off"
-            onFinishFailed={onFinishFailed}
-          >
-            <Form.Item
-              label="Website"
-              name="website"
-              // tooltip="Website"
-              rules={[{ required: true, message: "Please enter website" }]}
+      <div className="tool-panel">
+        <PageHeader
+          title="Pashword"
+          description="Generate a deterministic password from a site, username, and your secret key. Past sites are remembered locally (secret is not stored)."
+        />
+        <Row gutter={[24, 24]}>
+          <Col xs={24} md={14}>
+            <Form
+              form={form}
+              layout="vertical"
+              name="pashword"
+              initialValues={{ length: "20" }}
+              onFinish={onFinish}
+              requiredMark="optional"
+              autoComplete="off"
             >
-              <AutoComplete options={credentialOptions} onSelect={onSelect} />
-            </Form.Item>
-            <Form.Item
-              label="Username"
-              name="username"
-              rules={[{ required: true, message: "Please enter username" }]}
-            >
-              <Input />
-            </Form.Item>
+              <Form.Item
+                label="Website"
+                name="website"
+                rules={[{ required: true, message: "Enter a website" }]}
+              >
+                <AutoComplete
+                  options={credentialOptions}
+                  onSelect={onSelect}
+                  placeholder="example.com"
+                />
+              </Form.Item>
+              <Form.Item
+                label="Username"
+                name="username"
+                rules={[{ required: true, message: "Enter a username" }]}
+              >
+                <Input placeholder="you@example.com" />
+              </Form.Item>
+              <Form.Item
+                label="Secret Key"
+                name="secretKey"
+                rules={[{ required: true, message: "Enter your secret key" }]}
+              >
+                <Input.Password placeholder="Your master secret" />
+              </Form.Item>
+              <Form.Item name="length" label="Length">
+                <Select
+                  options={[
+                    { value: "10", label: "Small (10)" },
+                    { value: "20", label: "Medium (20)" },
+                    { value: "40", label: "Large (40)" },
+                  ]}
+                />
+              </Form.Item>
+              <Form.Item>
+                <Button type="primary" htmlType="submit" block>
+                  Generate
+                </Button>
+              </Form.Item>
+            </Form>
 
-            <Form.Item
-              label="Secret Key"
-              name="secretKey"
-              rules={[{ required: true, message: "Please enter secret key" }]}
-            >
-              <Input.Password />
-            </Form.Item>
-
-            <Form.Item name="length" label="Length" initialValue={20}>
-              <Select
-                options={[
-                  {
-                    value: "10",
-                    label: "Small",
-                  },
-                  {
-                    value: "20",
-                    label: "Medium",
-                  },
-                  {
-                    value: "40",
-                    label: "Large",
-                  },
-                ]}
-              ></Select>
-            </Form.Item>
-
-            <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-              <Button type="primary" htmlType="submit">
-                Generate
-              </Button>
-            </Form.Item>
-          </Form>
-          {generatedPashword && (
-            <>
-              <Divider></Divider>
-              <Alert
-                message={generatedPashword}
-                type="success"
-                action={
-                  <CopyToClipboard text={generatedPashword}>
-                    <Tooltip title="copy">
-                      <Button icon={<CopyOutlined />} />
-                    </Tooltip>
-                  </CopyToClipboard>
-                }
-              />
-              <QRCode value={generatedPashword}></QRCode>
-            </>
-          )}
-        </Col>
-      </Row>
+            {generatedPashword && (
+              <div className="tool-result">
+                <Alert
+                  message={
+                    <span className="password-display">{generatedPashword}</span>
+                  }
+                  type="success"
+                  showIcon
+                  action={<CopyButton text={generatedPashword} />}
+                />
+              </div>
+            )}
+          </Col>
+          <Col xs={24} md={10}>
+            {generatedPashword ? (
+              <div className="qr-preview">
+                <QRCode value={generatedPashword} size={160} />
+                <CopyButton text={generatedPashword} label="Copy password" />
+              </div>
+            ) : (
+              <div className="qr-preview">
+                <span style={{ color: "rgba(0,0,0,0.45)", textAlign: "center" }}>
+                  Your password QR will appear here after generating
+                </span>
+              </div>
+            )}
+          </Col>
+        </Row>
+      </div>
     </Spin>
   );
 }
