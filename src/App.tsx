@@ -1,5 +1,5 @@
 import "./App.css";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
@@ -10,11 +10,28 @@ import {
 import { Button, Grid, Layout, Menu, Typography, theme } from "antd";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import type { MenuProps } from "antd";
-import { getToolByPath, tools } from "./tools";
+import {
+  categoryLabels,
+  extraTools,
+  featuredTools,
+  getToolByPath,
+  toolsByCategory,
+  type ToolCategory,
+} from "./tools";
 
 const { Header, Sider, Content } = Layout;
 const { Text, Title } = Typography;
 const { useBreakpoint } = Grid;
+
+const extraCategoryOrder: ToolCategory[] = [
+  "text",
+  "time",
+  "network",
+  "security",
+  "image",
+  "iran",
+  "dev",
+];
 
 const App: React.FC = () => {
   const screens = useBreakpoint();
@@ -34,14 +51,66 @@ const App: React.FC = () => {
     setCollapsed(isMobile);
   }, [isMobile]);
 
+  const groupedExtras = useMemo(() => toolsByCategory(extraTools), []);
+
+  const menuItems: MenuProps["items"] = useMemo(
+    () => [
+      {
+        key: "",
+        icon: <HomeOutlined />,
+        label: "Home",
+      },
+      {
+        type: "group",
+        label: collapsed ? undefined : "Featured",
+        children: featuredTools.map((tool) => ({
+          key: tool.path,
+          icon: tool.icon,
+          label: tool.label,
+        })),
+      },
+      {
+        type: "group",
+        label: collapsed ? undefined : "More tools",
+        children: extraCategoryOrder
+          .filter((cat) => (groupedExtras[cat] ?? []).length > 0)
+          .map((cat) => ({
+            key: `cat-${cat}`,
+            label: categoryLabels[cat],
+            children: (groupedExtras[cat] ?? []).map((tool) => ({
+              key: tool.path,
+              icon: tool.icon,
+              label: tool.label,
+            })),
+          })),
+      },
+      { type: "divider" },
+      {
+        key: "github",
+        icon: <GithubOutlined />,
+        label: "GitHub",
+      },
+    ],
+    [collapsed, groupedExtras]
+  );
+
   const onClick: MenuProps["onClick"] = (info) => {
     if (info.key === "github") {
       window.open("https://github.com/pashaie/pashautils", "_blank");
       return;
     }
+    if (String(info.key).startsWith("cat-")) return;
     navigate(info.key);
     if (isMobile) setCollapsed(true);
   };
+
+  const openKeys = useMemo(() => {
+    if (!selectedKey || featuredTools.some((t) => t.key === selectedKey)) {
+      return [];
+    }
+    const tool = extraTools.find((t) => t.key === selectedKey);
+    return tool ? [`cat-${tool.category}`] : [];
+  }, [selectedKey]);
 
   return (
     <Layout className="app-layout">
@@ -51,7 +120,7 @@ const App: React.FC = () => {
         collapsed={collapsed}
         breakpoint="md"
         collapsedWidth={isMobile ? 0 : 80}
-        width={240}
+        width={260}
         className="app-sider"
       >
         <div
@@ -77,25 +146,10 @@ const App: React.FC = () => {
           theme="dark"
           mode="inline"
           selectedKeys={[selectedKey]}
+          defaultOpenKeys={openKeys}
           onClick={onClick}
-          items={[
-            {
-              key: "",
-              icon: <HomeOutlined />,
-              label: "Home",
-            },
-            ...tools.map((tool) => ({
-              key: tool.path,
-              icon: tool.icon,
-              label: tool.label,
-            })),
-            { type: "divider" as const },
-            {
-              key: "github",
-              icon: <GithubOutlined />,
-              label: "GitHub",
-            },
-          ]}
+          items={menuItems}
+          style={{ borderInlineEnd: 0 }}
         />
       </Sider>
       {isMobile && !collapsed && (
@@ -122,7 +176,8 @@ const App: React.FC = () => {
           />
           <div className="app-header__title">
             <Text strong>
-              {activeTool?.label ?? (selectedKey === "" ? "Home" : "Pasha Utils")}
+              {activeTool?.label ??
+                (selectedKey === "" ? "Home" : "Pasha Utils")}
             </Text>
             {activeTool && (
               <Text type="secondary" className="app-header__hint">
@@ -131,7 +186,10 @@ const App: React.FC = () => {
             )}
           </div>
         </Header>
-        <Content className="app-content" style={{ background: colorBgContainer }}>
+        <Content
+          className="app-content"
+          style={{ background: colorBgContainer }}
+        >
           <Outlet />
         </Content>
       </Layout>
